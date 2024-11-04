@@ -1,0 +1,32 @@
+@startuml
+
+entity "User" as user {
+    +id : Integer
+    username : String
+    password : String
+}
+
+
+
+entity "Book" as book {
+    +id : Integer
+    title : String
+    year : Integer
+    author : String
+    genre : Genre[{genre}]
+
+}
+
+entity "LentBook" as lentbook {
+    +id : Integer
+    user : User
+    book : Book
+    lentDate : LocalDateTime
+    returnDate : LocalDateTime
+}
+
+' Relationships
+user "1" --o "0..*" lentbook
+book "1" --o "0..*" lentbook
+
+@enduml

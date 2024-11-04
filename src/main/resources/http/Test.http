@@ -1,0 +1,101 @@
+### Simple GET request for testing authentication endpoint.
+GET {{url}}/auth/test/
+
+### Register a new user with USER role
+POST {{url}}/auth/register/
+Content-Type: application/json
+
+{
+  "username": "user1",
+  "password": "test12345"
+}
+
+### Login to receive token
+POST {{url}}/auth/login/
+Content-Type: application/json
+
+{
+  "username": "user12",
+  "password": "test12345"
+}
+
+> {%
+    client.global.set("jwt_token", response.body['token']);
+%}
+
+### Access USER-protected endpoint
+GET {{url}}/protected/user_demo/
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+### Access ADMIN-protected endpoint
+GET {{url}}/protected/admin_demo/
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+### Assign ADMIN role to the user
+POST {{url}}/auth/user/addrole/
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "role": "ADMIN"
+}
+
+### Add a new trip
+POST {{url}}/trips
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "name": "Hans Foster",
+  "startTime": "2024-3-12",
+  "endTime": "2024-27-12",
+  "startPosition": "Copenhagen",
+  "price": "2000",
+  "category": "snow"
+}
+
+
+
+### Add an guide for a specific trip
+POST {{url}}/trips/1/guides
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "firstName": "james",
+  "lastName": "Cone",
+  "email": "jcone@hotmail.com",
+  "phone": "55693248"
+}
+
+
+### View all doctors
+GET {{url}}/trips
+Accept: application/json
+
+### View a specific doctor by ID
+GET {{url}}/trips/1
+Accept: application/json
+
+
+
+### Update a specific trip by ID
+PUT {{url}}/trips/3
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "name": "jens Otto",
+  "startTime": "2024-5-11",
+  "endTime": "2024-1-12",
+  "startPosition": "Copenhagen",
+  "price": "2000",
+  "category": "snow"
+}
+
+### Delete doctor by ID
+DELETE {{url}}/trips/1
+Authorization: Bearer {{jwt_token}}
+Accept: application/json
